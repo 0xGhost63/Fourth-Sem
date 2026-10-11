@@ -1,0 +1,112 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --blue: #6A8DFF;
+  --ink: #050a1c;
+  --panel: #070c22;
+}
+
+.page {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #000;
+  font-family: "Courier New", monospace;
+  color: #cfd8ff;
+}
+
+.card {
+  width: 340px;
+  background: var(--panel);
+  border: 2px solid var(--blue);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(106, 141, 255, .35), 0 20px 40px rgba(0, 0, 0, .6);
+  transition: transform .3s, box-shadow .3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 45px rgba(106, 141, 255, .6), 0 30px 50px rgba(0, 0, 0, .7);
+}
+
+.card__photo {
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  object-position: center bottom;
+  border-bottom: 2px solid var(--blue);
+}
+
+.card__body { padding: 24px; text-align: center; }
+
+.card__name {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 4px;
+  color: var(--blue);
+  text-shadow: 0 0 10px var(--blue);
+}
+
+.card__role { margin: 6px 0 14px; font-size: .85rem; color: #9fb4ff; }
+
+.card__role::after {
+  content: "_";
+  margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.card__bio { margin: 0 0 20px; font-size: .85rem; line-height: 1.6; }
+
+.stats {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.stats__item {
+  flex: 1;
+  padding: 10px 4px;
+  font-size: .7rem;
+  border: 1px solid rgba(106, 141, 255, .4);
+  border-radius: 10px;
+  transition: background .2s, transform .2s;
+}
+
+.stats__item:hover { background: rgba(106, 141, 255, .15); transform: scale(1.06); }
+
+.stats__num { display: block; font-size: 1.4rem; font-weight: bold; color: var(--blue); }
+
+.contact {
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+  font-size: .8rem;
+  text-align: left;
+}
+
+.contact__item { margin: 6px 0; padding-left: 12px; border-left: 3px solid var(--blue); }
+
+.btn {
+  display: block;
+  padding: 12px;
+  background: var(--blue);
+  color: var(--ink);
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-radius: 50px;
+  box-shadow: 0 4px 0 #3a55c9;
+  transition: transform .15s, box-shadow .15s;
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #3a55c9, 0 0 20px var(--blue); }
+
+.btn:active { transform: translateY(4px); box-shadow: 0 0 0 #3a55c9; }

@@ -1,0 +1,207 @@
+/* Simple & Humanised Store Theme */
+:root {
+  --primary: #2563eb;          /* Friendly Classic Blue */
+  --primary-dark: #1d4ed8;
+  --secondary: #059669;        /* Emerald Accent */
+  --bg-dark: #18181b;          /* Neutral Off-Black */
+  --bg-body: #f9fafb;         /* Soft Clean Off-White */
+  --card-bg: #ffffff;
+  --text-main: #18181b;
+  --text-muted: #6b7280;
+  --accent: #d97706;           /* Soft Amber */
+  --border-color: #e5e7eb;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* Screen reader utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Header */
+.store-header {
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.header-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.store-header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.store-header p {
+  color: #a1a1aa;
+  font-size: 1.05rem;
+}
+
+/* Main Gallery */
+.store-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Responsive Grid using auto-fit & minmax() */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* Product Card */
+.product-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  outline: none;
+}
+
+/* Accessible Hover & Focus State */
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  border-color: #d4d4d8;
+}
+
+.product-card:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Image container & Badges */
+.product-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: #f4f4f5;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.badge-new {
+  background-color: var(--secondary);
+}
+
+.badge-sale {
+  background-color: #dc2626;
+}
+
+.badge-popular {
+  background-color: var(--primary);
+}
+
+/* Body & Content */
+.product-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-content h3 {
+  font-size: 1.15rem;
+  color: var(--bg-dark);
+  margin-bottom: 8px;
+}
+
+.description {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+/* Card Footer */
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--bg-dark);
+}
+
+.action-btn {
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, outline 0.2s ease;
+}
+
+/* Accessible Action Button Hover & Focus */
+.action-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+.action-btn:focus-visible {
+  outline: 3px solid var(--bg-dark);
+  outline-offset: 2px;
+}
+
+/* Footer */
+.store-footer {
+  background-color: var(--bg-dark);
+  color: #a1a1aa;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+}

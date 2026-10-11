@@ -1,0 +1,148 @@
+:root {
+  --primary: #2563eb;          /* Friendly Classic Blue */
+  --primary-dark: #1d4ed8;
+  --bg-dark: #18181b;          /* Neutral Off-Black */
+  --bg-body: #f9fafb;         /* Soft Clean Off-White */
+  --card-bg: #ffffff;
+  --text-main: #18181b;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.faq-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.faq-header h1 {
+  font-size: 2rem;
+  color: var(--bg-dark);
+  margin-bottom: 8px;
+}
+
+.faq-header p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+/* Accordion Item */
+details {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Clickable Header */
+summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 56px 18px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--bg-dark);
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary:hover {
+  background-color: #f4f4f5;
+}
+
+/* Visible Keyboard-Focus State */
+summary:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: -3px;
+  background-color: #eff6ff;
+}
+
+/* Pseudo-element Icon (+) */
+summary::after {
+  content: "+";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e4e4e7;
+  color: var(--bg-dark);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+  /* transition property */
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transform on Details Open */
+details[open] summary::after {
+  content: "+";
+  transform: translateY(-50%) rotate(45deg);
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+/* Revealing Content */
+.content {
+  padding: 16px 24px 20px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.975rem;
+}
+
+/* Keyframes Animation */
+details[open] .content {
+  animation: slide-down 0.3s ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Prefers Reduced Motion Rule */
+@media (prefers-reduced-motion: reduce) {
+  summary::after {
+    transition: none;
+  }
+
+  details[open] .content {
+    animation: none;
+  }
+}

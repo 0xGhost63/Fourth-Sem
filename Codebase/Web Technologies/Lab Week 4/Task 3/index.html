@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 4 Task 3 - TechGear Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Grid Container using grid-template-areas -->
+  <div class="dashboard-layout">
+
+    <!-- Header Area -->
+    <header class="dash-header">
+      <div class="brand">
+        <h1>TechGear <span>Dashboard</span></h1>
+      </div>
+      <div class="user-info">
+        <span class="user-name">Alex Morgan</span>
+        <span class="date">October 2026</span>
+      </div>
+    </header>
+
+    <!-- Sidebar Area -->
+    <aside class="dash-sidebar">
+      <nav aria-label="Dashboard Navigation">
+        <a href="#" class="nav-item active" aria-current="page">Overview</a>
+        <a href="#" class="nav-item">Analytics</a>
+        <a href="#" class="nav-item">Orders</a>
+        <a href="#" class="nav-item">Products</a>
+        <a href="#" class="nav-item">Settings</a>
+      </nav>
+    </aside>
+
+    <!-- Stats Cards Area -->
+    <section class="dash-stats" aria-label="Key Performance Indicators">
+      <article class="stat-card">
+        <h3>Total Revenue</h3>
+        <p class="stat-value">Rs. 184,200</p>
+        <p class="stat-trend positive">+12% vs last month</p>
+      </article>
+
+      <article class="stat-card">
+        <h3>Active Orders</h3>
+        <p class="stat-value">64</p>
+        <p class="stat-trend positive">8 pending dispatch</p>
+      </article>
+
+      <article class="stat-card">
+        <h3>New Customers</h3>
+        <p class="stat-value">29</p>
+        <p class="stat-trend positive">+5 this week</p>
+      </article>
+
+      <article class="stat-card">
+        <h3>Low Stock Items</h3>
+        <p class="stat-value">3</p>
+        <p class="stat-trend warning">Reorder suggested</p>
+      </article>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="dash-main">
+      <div class="card">
+        <h2>Recent Transactions</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Product</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#TR-8901</td>
+                <td>Sarah Jenkins</td>
+                <td>Pro Wireless Headphones</td>
+                <td>Rs. 14,900</td>
+                <td><span class="status-badge status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td>#TR-8902</td>
+                <td>Michael Chen</td>
+                <td>Mechanical Keyboard</td>
+                <td>Rs. 12,000</td>
+                <td><span class="status-badge status-processing">Processing</span></td>
+              </tr>
+              <tr>
+                <td>#TR-8903</td>
+                <td>Emma Watson</td>
+                <td>Fit Pulse Smartwatch</td>
+                <td>Rs. 19,900</td>
+                <td><span class="status-badge status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td>#TR-8904</td>
+                <td>David Miller</td>
+                <td>USB-C Multiport Dock</td>
+                <td>Rs. 4,500</td>
+                <td><span class="status-badge status-pending">Pending</span></td>
+              </tr>
+              <tr>
+                <td>#TR-8905</td>
+                <td>Sophia Taylor</td>
+                <td>Ergonomic Mouse</td>
+                <td>Rs. 5,900</td>
+                <td><span class="status-badge status-completed">Completed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="dash-footer">
+      <p>&copy; 2026 TechGear Analytics. All rights reserved.</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
