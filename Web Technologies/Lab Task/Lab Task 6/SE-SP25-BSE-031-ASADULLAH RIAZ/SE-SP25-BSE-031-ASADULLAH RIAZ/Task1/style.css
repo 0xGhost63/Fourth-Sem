@@ -1,0 +1,109 @@
+/* lab 06 stylesheet */
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  background: #fdfaf3;
+  color: #222;
+  max-width: 720px;
+  margin: 30px auto;
+  padding: 0 16px;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 28px;
+  border-bottom: 1px solid #222;
+}
+
+.info {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+input, button {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 5px 8px;
+  border: 1px solid #222;
+  background: #fff;
+}
+
+button {
+  background: #eee;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ddd;
+}
+
+input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 6px 0 10px 0;
+}
+
+.error {
+  color: #b00020;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #222;
+  padding: 5px 8px;
+  text-align: left;
+}
+
+th {
+  background: #eee;
+}
+
+.found {
+  background: #ffef9f;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.box {
+  flex: 1;
+  border: 1px solid #222;
+  padding: 10px;
+}
+
+.time {
+  font-family: "Courier New", monospace;
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.log {
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  background: #f1eee4;
+  border: 1px solid #222;
+  padding: 8px;
+  margin-top: 14px;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #777;
+  border-top: 1px solid #aaa;
+  padding-top: 6px;
+}

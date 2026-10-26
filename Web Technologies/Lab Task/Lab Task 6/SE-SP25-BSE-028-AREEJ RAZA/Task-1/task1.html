@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 1: Safe Marks Analyser | Areej Raza</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="header-card">
+      <div class="header-top">
+        <h1 class="header-title">Task 1: Safe Marks Analyser</h1>
+        <span class="header-badge">LAB 06 &bull; TASK 01</span>
+      </div>
+      <p class="header-desc">
+        Validates mark arrays safely without mutating the input. Accurately handles empty inputs without NaN or division by zero, and validates range [0, 100].
+      </p>
+      <div class="meta-row">
+        <span>Student: <strong>Areej Raza</strong></span>
+        <span>Roll No: <strong>SE-SP25-BSE-028</strong></span>
+        <span>Course: <strong>Web Technologies (CS-312)</strong></span>
+        <span>Function: <strong>analyseMarks(rawMarks)</strong></span>
+      </div>
+    </header>
+
+    <!-- Main Task Card -->
+    <main class="task-section">
+      <div class="section-head">
+        <h2 class="section-title">Interactive Analysis</h2>
+        <span class="task-tag">Independent Task</span>
+      </div>
+
+      <div class="form-group">
+        <label for="marksInput" class="field-label">Raw Marks Input (comma-separated):</label>
+        <input 
+          type="text" 
+          id="marksInput" 
+          class="input-text" 
+          value="78, 45, 90, 60" 
+          placeholder="e.g. 78, 45, 90, 60"
+        >
+      </div>
+
+      <!-- Action & Preset Buttons -->
+      <div class="btn-row">
+        <button id="analyseBtn" class="btn btn-primary">Analyse Marks</button>
+        <button class="btn btn-secondary btn-preset" data-test="sample">Sample (78, 45, 90, 60)</button>
+        <button class="btn btn-secondary btn-preset" data-test="empty">Empty Array []</button>
+        <button class="btn btn-secondary btn-preset" data-test="blank">Whitespace Error</button>
+        <button class="btn btn-secondary btn-preset" data-test="invalid">Non-numeric Error</button>
+        <button class="btn btn-secondary btn-preset" data-test="outofrange">Out of Range (105)</button>
+      </div>
+
+      <!-- Error message alert -->
+      <div id="errorBox" class="alert-error hidden"></div>
+
+      <!-- Results Grid -->
+      <div id="resultsContainer" class="metrics-grid">
+        <div class="metric-tile">
+          <div class="metric-tile-label">Total Count</div>
+          <div id="statCount" class="metric-tile-val">0</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-tile-label">Sum Total</div>
+          <div id="statTotal" class="metric-tile-val">0</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-tile-label">Average</div>
+          <div id="statAverage" class="metric-tile-val">0.00</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-tile-label">Passed (&ge;50)</div>
+          <div id="statPassed" class="metric-tile-val">0</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-tile-label">Highest Score</div>
+          <div id="statHighest" class="metric-tile-val">0</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 14px;">
+        <span class="field-label">Mark Breakdown:</span>
+        <div id="marksList" style="margin-top: 4px;"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      Software Engineering &bull; Web Technologies Lab 06 &bull; Areej Raza
+    </footer>
+
+  </div>
+
+  <script src="marksAnalyser.js"></script>
+</body>
+</html>

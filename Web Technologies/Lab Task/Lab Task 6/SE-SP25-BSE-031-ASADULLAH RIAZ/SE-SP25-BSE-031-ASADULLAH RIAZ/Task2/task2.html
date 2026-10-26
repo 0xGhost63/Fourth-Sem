@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Task 2: Catalogue Report</h1>
+  <p class="info">ASADULLAH RIAZ | SE-SP25-BSE-031 | Web Technologies (CS-312) | Lab 06</p>
+
+  <p>
+    Search title:
+    <input type="text" id="search" value="css">
+    Discount %:
+    <input type="number" id="discount" value="10" min="0" max="100" style="width: 70px;">
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Discounted</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <h2>Report</h2>
+  <p>Uppercase titles: <span id="titles"></span></p>
+  <p>Total stock value: <span id="value"></span></p>
+  <p>Any out of stock: <span id="anyOut"></span></p>
+  <p>All in stock: <span id="allIn"></span></p>
+  <p>Original array unchanged: <span id="audit"></span></p>
+
+  <h2>Books sorted by price (lowest first)</h2>
+  <ol id="ranking"></ol>
+
+  <footer>Web Technologies Lab 06 - ASADULLAH RIAZ</footer>
+
+  <script src="catalogue_report.js"></script>
+</body>
+</html>

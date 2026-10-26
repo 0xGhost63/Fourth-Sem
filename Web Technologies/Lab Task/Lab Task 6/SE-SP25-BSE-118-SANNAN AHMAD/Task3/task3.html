@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 3 | Sannan Ahmad</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="site-header">
+    <h1>Web Technologies (CS-312) - Lab 06</h1>
+    <div class="student-info">Sannan Ahmad &bull; Roll No: SE-SP25-BSE-118</div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav-tabs">
+    <a href="../Task1/task1.html">Task 1: Marks Analyser</a>
+    <a href="../Task2/task2.html">Task 2: Book Catalogue</a>
+    <a href="task3.html" class="active">Task 3: Revision Tracker</a>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <div class="content-box">
+      <h2 class="page-title">Task 3: Reusable Revision Tracker Module</h2>
+      <p class="page-description">
+        Demonstrates closure state encapsulation and ES6 modules. Two independent revision trackers maintain separate minutes; resetting one tracker does not affect the other.
+      </p>
+
+      <!-- Trackers Side by Side -->
+      <div class="trackers-row">
+        <!-- Tracker 1 -->
+        <div class="tracker-box">
+          <h3>Tracker 1: Web Technologies</h3>
+          <div class="baseline-text">Initial baseline: 0 min</div>
+          <div class="tracker-display">
+            <div id="t1Display" class="minutes-value">0 min</div>
+            <div class="minutes-label">Total Revision Time</div>
+          </div>
+          <div class="tracker-actions">
+            <div class="sub-row">
+              <button id="btnT1Add15" class="btn btn-secondary">+15 min</button>
+              <button id="btnT1Add30" class="btn btn-secondary">+30 min</button>
+            </div>
+            <button id="btnT1Batch" class="btn btn-secondary">+ Batch (20, 25, 35 min)</button>
+            <button id="btnT1Reset" class="btn btn-danger">Reset Tracker 1</button>
+          </div>
+        </div>
+
+        <!-- Tracker 2 -->
+        <div class="tracker-box">
+          <h3>Tracker 2: Software Engineering</h3>
+          <div class="baseline-text">Initial baseline: 45 min</div>
+          <div class="tracker-display">
+            <div id="t2Display" class="minutes-value">45 min</div>
+            <div class="minutes-label">Total Revision Time</div>
+          </div>
+          <div class="tracker-actions">
+            <div class="sub-row">
+              <button id="btnT2Add15" class="btn btn-secondary">+15 min</button>
+              <button id="btnT2Add30" class="btn btn-secondary">+30 min</button>
+            </div>
+            <button id="btnT2Batch" class="btn btn-secondary">+ Batch (15, 20 min)</button>
+            <button id="btnT2Reset" class="btn btn-danger">Reset Tracker 2</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Log -->
+      <h3 style="font-size: 15px; color: #1e3a5f; margin: 24px 0 6px 0;">Demonstration Log:</h3>
+      <div id="logMessage" class="log-box">
+        Trackers initialized. Ready for user interaction.
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      Web Technologies Lab 06 &bull; Sannan Ahmad (SE-SP25-BSE-118)
+    </footer>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

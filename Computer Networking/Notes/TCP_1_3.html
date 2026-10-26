@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Transport Layer Notes (Chapter 3)</title>
+<style>
+:root{--bg:#fff;--fg:#1b1b1f;--mu:#5b6068;--bx:#f1f3f6;--bd:#cfd4dc;--ac:#1d4ed8;--ok:#15803d;--no:#b91c1c;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14151a;--fg:#e6e7ea;--mu:#a0a5ae;--bx:#1e2027;--bd:#363a45;--ac:#7aa2ff;--ok:#4ade80;--no:#f87171;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14151a;--fg:#e6e7ea;--mu:#a0a5ae;--bx:#1e2027;--bd:#363a45;--ac:#7aa2ff;--ok:#4ade80;--no:#f87171;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0 auto;max-width:760px;padding:16px;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1{font-size:1.7rem;margin:.3em 0}h2{font-size:1.35rem;margin:2em 0 .4em;border-bottom:2px solid var(--bd);padding-bottom:4px}h3{font-size:1.1rem;margin:1.4em 0 .3em}
+a{color:var(--ac)}code,.f{font-family:ui-monospace,Consolas,monospace;background:var(--bx);padding:1px 5px;border-radius:4px;font-size:.92em}
+.box{background:var(--bx);border:1px solid var(--bd);border-left:5px solid var(--ac);padding:8px 14px;margin:14px 0;border-radius:4px}
+.box b.t{display:block;color:var(--ac)}.mem{border-left-color:var(--ok)}.mem b.t{color:var(--ok)}.m{border-left-color:var(--no)}.m b.t{color:var(--no)}
+.tb{overflow-x:auto}table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.94rem}th,td{border:1px solid var(--bd);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--bx)}
+svg{width:100%;height:auto;color:var(--fg);display:block}.an{border:1px solid var(--bd);border-radius:4px;padding:8px;margin:12px 0}
+button{font:inherit;padding:4px 12px;border:1px solid var(--bd);background:var(--bx);color:var(--fg);border-radius:4px;cursor:pointer}
+nav a{margin-right:10px;white-space:nowrap}.mu{color:var(--mu)}
+</style>
+</head>
+<body>
+<button onclick="tg()" style="float:right">☀/☾ theme</button>
+<h1>Transport Layer — Chapter 3 Notes</h1>
+<p class="mu">Covers slides 3.1 (services, mux/demux, UDP), 3.2 (reliable data transfer) and 3.3 (TCP, congestion control, evolution). Based on Kurose &amp; Ross, 9th ed. Press ▶ on any animation to watch it step by step.</p>
+<nav><a href="#s0">Big picture</a><a href="#s1">Mux/Demux</a><a href="#s2">UDP</a><a href="#s3">Reliable transfer</a><a href="#s4">TCP</a><a href="#s5">Congestion</a><a href="#s6">Newer TCP/QUIC</a><a href="#s7">Cheat sheet</a></nav>
+
+<h2 id="s0">0. Big picture</h2>
+<p>The <b>network layer (IP)</b> delivers packets <b>host to host</b>. The <b>transport layer</b> delivers data <b>process to process</b> (app to app) — that’s “logical communication”.</p>
+<div class="box"><b class="t">Example: two apartment buildings</b>Building A and B each have 12 kids who write letters to each other. The postman (IP) only brings mail to the <i>building</i>. In each building, one kid (the transport layer) collects outgoing letters and hands incoming letters to the right kid. Kids = processes, building = host, kid-in-charge = transport protocol.</div>
+<ul>
+<li><b>Sender:</b> takes the app message → cuts it into <b>segments</b> (adds a transport header) → hands to IP.</li>
+<li><b>Receiver:</b> gets segments from IP → checks the header → rebuilds the message → gives it to the right app via a <b>socket</b>.</li>
+</ul>
+<table><tr><th></th><th>TCP</th><th>UDP</th></tr>
+<tr><td>Connection</td><td>Yes (handshake first)</td><td>No</td></tr>
+<tr><td>Delivery</td><td>Reliable, in order</td><td>Unreliable, may be lost / reordered</td></tr>
+<tr><td>Flow + congestion control</td><td>Yes</td><td>No</td></tr>
+<tr><td>Speed / overhead</td><td>Slower, more overhead</td><td>Fast, tiny header</td></tr></table>
+<p class="mu">Neither can promise delay or bandwidth guarantees.</p>
+
+<h2 id="s1">1. Multiplexing &amp; demultiplexing</h2>
+<ul><li><b>Multiplexing (sender):</b> collect data from many sockets, stick a header (with ports) on each.</li>
+<li><b>Demultiplexing (receiver):</b> read the header and push each segment to the correct socket.</li></ul>
+<p>Every segment starts with <b>source port</b> and <b>destination port</b> (16 bits each). Every IP datagram carries source/destination IP. The host uses <i>IP + port</i> to find the socket.</p>
+<table><tr><th>Protocol</th><th>Socket is found using</th></tr>
+<tr><td>UDP</td><td><b>Destination port only</b></td></tr>
+<tr><td>TCP</td><td><b>4-tuple</b>: source IP, source port, dest IP, dest port</td></tr></table>
+<div class="box"><b class="t">Example: web server on port 80</b>Two browser tabs (clients C1, C2) connect to one server, both to <code>dest port 80</code>.<br><b>UDP:</b> both would land in the <i>same</i> socket (same dest port).<br><b>TCP:</b> the 4-tuples differ (different source IP/port), so the server makes a <i>separate socket per client</i>.</div>
+<div class="box mem"><b class="t">Remember</b>UDP = 1 key (dest port). TCP = 4 keys (the 4-tuple).</div>
+
+<h2 id="s2">2. UDP — “send and hope”</h2>
+<p>A bare-bones protocol. Segments may be <b>lost</b> or arrive <b>out of order</b>. Each segment is handled alone.</p>
+<h3>Why would anyone use it?</h3>
+<ul><li>No handshake → no extra RTT delay.</li><li>No connection state kept at sender/receiver → simple.</li><li>Small header.</li><li>No congestion control → can blast at any speed, even when the network is jammed.</li></ul>
+<p><b>Used by:</b> streaming/video calls (loss-tolerant, rate-sensitive), DNS, SNMP, HTTP/3. If you need reliability on UDP, build it in the <b>application</b> (HTTP/3 does).</p>
+<h3>UDP header (4 fields × 16 bits = 8 bytes)</h3>
+<p><code>source port | dest port | length | checksum</code> then the data. <i>Length</i> = whole segment incl. header, in bytes.</p>
+<h3>Internet checksum (detects flipped bits)</h3>
+<p>Sender treats the segment as 16-bit numbers, adds them, and stores the result in the checksum field. Receiver recomputes and compares.</p>
+<div class="box m"><b class="t">Maths one-liner</b>Add normally. If a 1 “falls off” the left end (carry-out), <b>add it back at the right</b> (wraparound). Then <b>flip every bit</b> → that’s the checksum.</div>
+<div class="box"><b class="t">Worked example</b><span class="f">1110011001100110</span> (= E666)<br><span class="f">1101010101010101</span> (= D555)<br>Sum = <span class="f">1 1011101110111011</span> → carry out! Add 1 back → <span class="f">1011101110111100</span><br>Flip all bits → checksum = <span class="f">0100010001000011</span><br>Receiver adds all pieces <i>plus</i> checksum: if no error, you get all 1s.</div>
+<p><b>Weak protection:</b> if one bit flips 0→1 in one number and another flips 1→0 in the same column of another number, the sum stays the same → error goes <b>undetected</b>.</p>
+
+<h2 id="s3">3. Principles of reliable data transfer (rdt)</h2>
+<p><b>Goal:</b> give the app a reliable channel while the real channel below is unreliable. Sender and receiver can’t see each other’s state — they only learn by <b>messages</b> (ACKs).</p>
+<p>Functions: <code>rdt_send()</code> (app → rdt), <code>udt_send()</code> (rdt → unreliable channel), <code>rdt_rcv()</code> (packet arrives), <code>deliver_data()</code> (rdt → app). We study one-way data, but ACKs flow both ways. Designs are written as <b>finite state machines</b>: <i>state → event / actions → next state</i>.</p>
+<h3>The ladder: each version fixes one problem</h3>
+<table><tr><th>Version</th><th>Channel problem</th><th>New tool added</th></tr>
+<tr><td>rdt1.0</td><td>None (perfect)</td><td>Just send / receive</td></tr>
+<tr><td>rdt2.0</td><td>Bit errors</td><td>Checksum + <b>ACK</b> / <b>NAK</b> + retransmit (stop-and-wait)</td></tr>
+<tr><td>rdt2.1</td><td>Corrupted ACK/NAK (2.0’s fatal flaw: sender can’t tell, resending may duplicate)</td><td><b>Sequence numbers</b> (0/1 is enough for stop-and-wait); receiver discards duplicates</td></tr>
+<tr><td>rdt2.2</td><td>Same, but NAK-free</td><td>ACK carries the seq # of the last good packet; a <b>duplicate ACK = NAK</b> (TCP does this)</td></tr>
+<tr><td>rdt3.0</td><td>Bit errors <b>+ loss</b></td><td><b>Timer</b>: no ACK in time → retransmit</td></tr></table>
+<div class="box mem"><b class="t">Remember</b>Error → checksum. Bad feedback → seq #. Loss → timer. Duplicates from timers → seq # kills them.</div>
+<p><b>Stop-and-wait:</b> send one packet, wait for its ACK. If the ACK is just <i>late</i>, the retransmit is a duplicate, and the seq # handles it.</p>
+<div class="an"><b>▶ rdt3.0 in action</b> (packet loss, then ACK loss) <button onclick="play('a1')">▶ Play</button><svg id="a1"></svg></div>
+
+<h3>Why stop-and-wait is terrible</h3>
+<div class="box m"><b class="t">Worked example: 1 Gbps link, 15 ms one-way delay, 8000-bit packet</b>Transmit time: <code>L/R = 8000 / 10⁹ = 8 µs = 0.008 ms</code><br>RTT = 2 × 15 = 30 ms<br>Utilization <code>U = (L/R) / (RTT + L/R) = 0.008 / 30.008 ≈ 0.00027</code><br>The sender is busy only <b>0.027%</b> of the time. The protocol wastes the fast link. <i>Fix: pipelining.</i></div>
+<p><b>Pipelining:</b> send many packets before waiting for ACKs. Needs a larger seq # range and buffering. 3 packets in flight → utilization ×3.</p>
+
+<h3>Go-Back-N (GBN)</h3>
+<ul><li>Sender has a <b>window</b> of up to N unACKed packets. Uses <b>cumulative ACK</b>: <code>ACK(n)</code> = “everything up to n received”. Window slides to start at n+1.</li>
+<li><b>One timer</b> (for the oldest unACKed packet). On timeout(n): resend n <b>and every later packet in the window</b>.</li>
+<li>Receiver remembers only <code>rcv_base</code>. Out-of-order packet → <b>discard</b> (or buffer, implementer’s choice) and re-ACK the highest in-order seq #. This creates duplicate ACKs.</li></ul>
+<div class="an"><b>▶ Go-Back-N: pkt2 lost</b> <button onclick="play('a2')">▶ Play</button><svg id="a2"></svg></div>
+
+<h3>Selective Repeat (SR)</h3>
+<ul><li>Receiver <b>ACKs every correct packet individually</b> and <b>buffers</b> out-of-order ones; delivers to the app in order once the gap fills.</li>
+<li>Sender keeps a <b>timer per packet</b>; on timeout resends <b>only that one</b>. Window advances when the smallest unACKed packet is ACKed.</li>
+<li>Receiver: packet in [rcvbase, rcvbase+N−1] → ACK it. Packet in [rcvbase−N, rcvbase−1] (already delivered, ACK was lost) → ACK again. Otherwise ignore.</li></ul>
+<div class="an"><b>▶ Selective Repeat: pkt2 lost</b> <button onclick="play('a3')">▶ Play</button><svg id="a3"></svg></div>
+<table><tr><th></th><th>Go-Back-N</th><th>Selective Repeat</th></tr>
+<tr><td>ACK type</td><td>Cumulative</td><td>Individual</td></tr><tr><td>Receiver buffers out-of-order?</td><td>No (usually)</td><td>Yes</td></tr>
+<tr><td>Timers</td><td>One</td><td>One per packet</td></tr><tr><td>On loss resend</td><td>Lost packet + all after it</td><td>Only the lost packet</td></tr></table>
+<div class="box"><b class="t">The SR dilemma</b>Seq #s 0,1,2,3 and window 3. Sender sends 0,1,2; all ACKs are lost; sender times out and resends 0. The receiver, already expecting a <i>new</i> seq 0 next, accepts the resend as new data → duplicate delivered. The receiver can’t see the sender, so both cases look identical.<br><b>Rule:</b> sequence-number space must be at least <b>2 × window size</b>.</div>
+
+<h2 id="s4">4. TCP</h2>
+<p>Point-to-point (1 sender, 1 receiver) · connection-oriented · reliable <b>in-order byte stream</b> (no message boundaries) · full duplex · cumulative ACKs · pipelined (window set by flow + congestion control) · <b>MSS</b> = max segment size.</p>
+<h3>Segment header</h3>
+<table><tr><th>Field</th><th>Meaning</th></tr>
+<tr><td>Source / dest port</td><td>Demultiplexing</td></tr>
+<tr><td>Sequence number</td><td>Byte-stream number of the <b>first data byte</b> in the segment (bytes, not segments!)</td></tr>
+<tr><td>Acknowledgement number</td><td><b>Next byte expected</b> from the other side</td></tr>
+<tr><td>Header length, checksum, urgent pointer, options</td><td>Housekeeping; checksum = Internet checksum</td></tr>
+<tr><td>Flags</td><td>A = ACK valid · S = SYN, F = FIN, R = RST (connection management) · C, E = congestion notification</td></tr>
+<tr><td>Receive window (rwnd)</td><td>Flow control: bytes the receiver will accept</td></tr></table>
+<div class="box"><b class="t">Example: telnet, user types ‘C’</b>A → B: <code>Seq=42, ACK=79, data='C'</code><br>B → A: <code>Seq=79, ACK=43, data='C'</code> (ACKs the C, echoes it back)<br>A → B: <code>Seq=43, ACK=80</code> (ACKs the echo)<br>Rule: ACK = my seq + bytes received. 42 + 1 byte = 43.</div>
+
+<h3>Timeout: how long to wait?</h3>
+<p>Too short → needless retransmits. Too long → slow reaction to loss. So estimate the RTT. <b>SampleRTT</b> = time from sending to ACK (ignore retransmitted segments). Smooth it with an EWMA (recent samples matter more, old ones fade exponentially):</p>
+<p><code>EstimatedRTT = (1−α)·EstimatedRTT + α·SampleRTT</code>, α = 0.125<br>
+<code>DevRTT = (1−β)·DevRTT + β·|SampleRTT − EstimatedRTT|</code>, β = 0.25<br>
+<code>TimeoutInterval = EstimatedRTT + 4·DevRTT</code> (the 4·Dev is the safety margin; more jitter → bigger margin)</p>
+<div class="box m"><b class="t">Maths one-liner</b>α = 0.125 = 1/8 → “keep 7/8 of the old value, add 1/8 of the new sample”. β = 0.25 → “keep 3/4 old, add 1/4 new”.</div>
+<div class="box"><b class="t">Worked example (slides): start EstimatedRTT = 370, DevRTT = 45, samples 380, 390, 340 ms</b>
+(The samples are worked backwards from the slide’s answers.)<br>
+Round 1: Est = 0.875×370 + 0.125×380 = 323.75 + 47.5 = <b>371.25</b><br>
+Dev = 0.75×45 + 0.25×|380−370| = 33.75 + 2.5 = <b>36.25</b> (uses the <i>old</i> estimate)<br>
+Timeout = 371.25 + 4×36.25 = <b>516.25</b><br>
+<div class="tb"><table><tr><th>Round</th><th>EstimatedRTT</th><th>DevRTT</th><th>Timeout</th></tr><tr><td>1</td><td>371.25</td><td>36.25</td><td>516.25</td></tr><tr><td>2</td><td>373.59</td><td>31.88</td><td>501.09</td></tr><tr><td>3</td><td>369.39</td><td>32.30</td><td>498.61</td></tr></table></div></div>
+
+<h3>Reliable transfer in TCP (a GBN/SR hybrid)</h3>
+<ul><li><b>Sender:</b> data from app → make segment, start timer if not running (timer = oldest unACKed segment). <b>Timeout</b> → resend that segment, restart timer. <b>ACK</b> → update what’s ACKed; restart timer if anything is still unACKed.</li>
+<li>Out-of-order handling at the receiver is left to the implementer.</li></ul>
+<table><tr><th>Event at receiver</th><th>Action</th></tr>
+<tr><td>In-order segment, everything before already ACKed</td><td><b>Delayed ACK</b>: wait up to 500 ms for another segment, then ACK</td></tr>
+<tr><td>In-order segment, another one has an ACK pending</td><td>Send <b>one cumulative ACK</b> for both immediately</td></tr>
+<tr><td>Out-of-order (higher seq, gap detected)</td><td>Immediately send <b>duplicate ACK</b> (next expected byte)</td></tr>
+<tr><td>Segment fills the gap (start or all)</td><td>Send ACK immediately if it starts at the lower end of the gap</td></tr></table>
+<div class="box"><b class="t">Retransmission scenarios</b><b>Lost ACK:</b> A sends Seq=92 (8 bytes → 92–99); B’s ACK=100 is lost; A times out, resends Seq=92; B sees a duplicate, discards, re-ACKs 100.<br><b>Premature timeout:</b> A sends Seq=92 (8 B) and Seq=100 (20 B); ACKs 100 and 120 are slow; A resends 92; B replies with cumulative ACK=120 and the sender moves on. Only <i>one</i> segment is resent.<br><b>Cumulative ACK saves you:</b> ACK=100 is lost but ACK=120 arrives in time → covers both, no retransmit.</div>
+<div class="box mem"><b class="t">Fast retransmit</b>Segment 100 is lost, but later segments arrive, so B keeps sending ACK=100 (duplicates). <b>3 extra ACKs for the same data (triple duplicate ACK)</b> = “3 segments arrived after the hole, it’s probably lost” → resend the smallest unACKed segment <i>now</i>, without waiting for the timeout.</div>
+
+<h3>Flow control (protect the receiver)</h3>
+<p>If IP delivers data faster than the app reads it, the receive buffer overflows. The receiver advertises free space in <b>rwnd</b>:</p>
+<p><code>rwnd = RcvBuffer − (data sitting in buffer)</code>. Sender keeps <code>unACKed bytes ≤ rwnd</code> → buffer can never overflow.</p>
+<div class="box"><b class="t">Example (water tank)</b>RcvBuffer = 4096 bytes, 1000 bytes not yet read by the app → rwnd = 3096. The sender may have at most 3096 unACKed bytes in flight. As the app reads, rwnd grows again.</div>
+<p><b>Silly Window Syndrome:</b> tiny segments (e.g. 1 byte of data + 20 bytes of header!) waste the network. Two causes, two fixes:</p>
+<ul><li><b>Slow sender → Nagle’s algorithm:</b> send the first bytes right away; then <i>wait</i> until enough bytes accumulate (≈ a full segment) <b>or</b> the ACK for the earlier data arrives; repeat.</li>
+<li><b>Slow receiving app → Clark’s solution:</b> don’t advertise tiny windows. Either delay the ACK until enough buffer is free, or ACK at once but advertise <b>rwnd = 0</b> until a reasonable amount of space opens.</li></ul>
+
+<h3>Connection management</h3>
+<p>Before data, both sides agree to connect and exchange starting seq #s and buffer sizes (state = ESTAB).</p>
+<p><b>Why not a 2-way handshake?</b> Delays, retransmitted requests and reordering break it: (1) <b>half-open connection</b> — client dies but server thinks it’s connected (an old duplicate request re-opened it); (2) <b>duplicate data accepted</b> — an old retransmitted request plus old data gets accepted as new.</p>
+<p><b>3-way handshake</b> fixes this: SYN → SYNACK → ACK. The client’s random start seq x and the server’s y must each be acknowledged, proving both are alive.</p>
+<div class="an"><b>▶ TCP 3-way handshake</b> <button onclick="play('a4')">▶ Play</button><svg id="a4"></svg></div>
+<p>Client states: LISTEN (server only) → SYNSENT → ESTAB. Server: LISTEN → SYN RCVD → ESTAB. The 3rd segment may already carry data.</p>
+<p><b>Closing:</b> each side sends a segment with <code>FIN=1</code>; the other answers with an ACK (which can be combined with its own FIN). Simultaneous FINs are fine.</p>
+
+<h2 id="s5">5. Congestion control</h2>
+<p><b>Congestion</b> = too many senders sending too fast for the <i>network</i>. Symptoms: <b>long delays</b> (router queues) and <b>packet loss</b> (buffer overflow).</p>
+<table><tr><th>Flow control</th><th>Congestion control</th></tr><tr><td>One sender too fast for <b>one receiver</b></td><td>Many senders too fast for the <b>network</b></td></tr></table>
+<h3>Costs of congestion (3 scenarios)</h3>
+<table><tr><th>Scenario</th><th>What happens</th></tr>
+<tr><td>1: two senders, one router, infinite buffer</td><td>Max throughput per connection = R/2. Delay grows huge as the send rate nears R/2.</td></tr>
+<tr><td>2: finite buffer, retransmissions</td><td>Packets get dropped → resent. Real senders also time out early, sending <b>unneeded duplicates</b>. Link carries extra copies, so useful throughput drops.</td></tr>
+<tr><td>3: four senders, multi-hop</td><td>A packet dropped far along the path wastes <b>all upstream capacity</b> already spent on it. Throughput can fall toward 0.</td></tr></table>
+<p><b>Insights:</b> delay climbs near capacity · loss + retransmission cut effective throughput · duplicates cut it more · throughput can never exceed capacity · downstream drops waste upstream work.</p>
+<p><b>Two approaches:</b> <b>end-to-end</b> (no help from routers; guess from loss/delay — <b>TCP does this</b>) or <b>network-assisted</b> (routers give feedback, e.g. ECN).</p>
+
+<h3>TCP congestion control</h3>
+<p>The sender limits itself with <b>cwnd</b>: <code>LastByteSent − LastByteAcked &lt; cwnd</code>. Roughly: send cwnd bytes, wait one RTT, send more, so <code>rate ≈ cwnd / RTT</code> bytes/s. (Real window = min(cwnd, rwnd).)</p>
+<div class="box m"><b class="t">Maths one-liner</b>Rate = window ÷ RTT. cwnd = 10 MSS, MSS = 1000 B, RTT = 0.1 s → 10,000 B ÷ 0.1 s = 100,000 B/s.</div>
+<h3>AIMD: “probe, crash, back off”</h3>
+<p><b>A</b>dditive <b>I</b>ncrease: +1 MSS per RTT until loss. <b>M</b>ultiplicative <b>D</b>ecrease: cut on loss. Drawn over time it’s a <b>sawtooth</b>. It’s distributed, stable and optimises flow rates network-wide.</p>
+<h3>Three phases</h3>
+<ol><li><b>Slow start:</b> cwnd = 1 MSS, <b>doubles each RTT</b> (+1 MSS per ACK). Starts slow, ramps up exponentially.</li>
+<li><b>Congestion avoidance:</b> once cwnd &gt; <b>ssthresh</b>, grow only <b>+1 MSS per RTT</b> (linear). On loss, ssthresh = cwnd/2 (half the cwnd just before loss).</li>
+<li><b>Loss reactions:</b> <b>3 duplicate ACKs</b> (mild) → TCP Reno: ssthresh = cwnd/2, cwnd = ssthresh (+3), fast recovery, then congestion avoidance. <b>Timeout</b> (severe) → ssthresh = cwnd/2, cwnd = 1 MSS, back to slow start. (Old TCP Tahoe cut to 1 MSS on both.)</li></ol>
+<div class="box mem"><b class="t">Remember</b>Dup ACKs = network still delivers something → halve. Timeout = nothing gets through → restart from 1.</div>
+<div class="an"><b>▶ cwnd over time (Reno)</b>, one point per RTT, ssthresh starts at 8 <button onclick="play('cw')">▶ Play</button><svg id="cw"></svg>
+<p class="mu" style="margin:4px 0 0">Reading it: 1→2→4→8 slow start (×2) · 8→12 linear (+1) · 3 dup ACKs: 12→6 · 6→12 linear · timeout: 12→1, then 1,2,4,6 doubling until ssthresh (=6), then +1.</p></div>
+
+<h3>Beyond classic Reno</h3>
+<ul><li><b>TCP CUBIC:</b> remembers Wmax (rate where loss occurred). After the cut, ramps up <b>fast</b> when far from Wmax, <b>slowly and carefully</b> near it (window grows with the <i>cube</i> of time distance from K). Linux default; most popular for web servers (until ~2024).</li>
+<li><b>Bottleneck link idea:</b> the slowest link on the path is always busy; its queue is rarely empty. Raising send rate there gives no extra throughput, only more queueing delay (higher RTT). Goal: <b>“keep the pipe just full, but not fuller.”</b> Ideal in-flight data = bandwidth × min RTT (bandwidth-delay product).</li>
+<li><b>Delay-based / BBR:</b> loss-based TCP runs at the <i>full-buffer</i> point; BBR runs at the just-full point, adjusting in-flight data (acceleration → cruising → deceleration to re-measure min RTT). Used on Google’s internal backbone.</li>
+<li><b>ECN (network-assisted):</b> a router sets 2 bits in the IP header (ToS) when congested; the receiver sets the <b>ECE</b> bit in its ACK; the sender slows down — no packet loss needed.</li></ul>
+<h3>Fairness</h3>
+<p>Goal: K TCP connections sharing a bottleneck of rate R each get <b>R/K</b>. AIMD achieves this (idealised: same RTT, all in congestion avoidance) because additive increase moves both equally while halving hurts the bigger one more, so they converge to equal shares.</p>
+<ul><li><b>UDP</b> apps (video/audio) skip congestion control, so they can hog bandwidth; nobody polices it.</li>
+<li><b>Parallel TCP connections:</b> link R, 9 connections exist. New app with 1 TCP gets R/10. New app with 11 TCPs gets ≈ 11/20 ≈ <b>R/2</b>.</li></ul>
+
+<h2 id="s6">6. Evolution: fixing TCP’s weak spots</h2>
+<table><tr><th>Variant</th><th>Problem solved</th><th>Idea</th></tr>
+<tr><td>Reno (limit)</td><td>—</td><td>Several losses in <b>one window</b> → cwnd halved <i>for each</i> (2 losses = ÷4), though one cut is enough.</td></tr>
+<tr><td>NewReno</td><td>Over-cutting</td><td>On 3 dup ACKs enter fast recovery. <b>Partial ACK</b> (covers only some packets outstanding at loss time) → don’t cut again, stay in recovery. <b>Full ACK</b> (covers all) → leave, enter congestion avoidance.</td></tr>
+<tr><td>SACK</td><td>Multiple losses per RTT</td><td>ACKs carry <b>blocks</b> of what was received, e.g. <code>ACK 200, SACK 300-600</code>. Sender sees exactly which segments are missing and resends only those, in one RTT. Congestion control rules are unchanged.</td></tr></table>
+<div class="box"><b class="t">Example: SACK</b>Sender sends 100–599 in 100-byte segments; 200–299 is lost. Without SACK: three duplicate <code>ACK 200</code>s, and it can’t tell what else is missing. With SACK: <code>ACK 200, SACK 300-400</code>, then <code>300-500</code>, <code>300-600</code> → sender knows <i>only 200–299</i> is missing and resends just that.</div>
+<table><tr><th>Scenario</th><th>Challenge</th></tr><tr><td>Long fat pipes</td><td>Many packets in flight; loss stalls the pipeline</td></tr><tr><td>Wireless</td><td>Noise/mobility loss misread as congestion</td></tr><tr><td>Long-delay links</td><td>Huge RTTs</td></tr><tr><td>Data centres</td><td>Latency-sensitive</td></tr><tr><td>Background traffic</td><td>Needs low priority</td></tr></table>
+<h3>QUIC (basis of HTTP/3)</h3>
+<ul><li>Application-layer protocol <b>on top of UDP</b> (Chrome, YouTube, many Google servers).</li>
+<li>Re-implements TCP-style connection setup, error control and congestion control, plus encryption, in user space.</li>
+<li>Setup in <b>1 (or even 0) RTT</b> with reliability, congestion control, authentication and encryption together.</li>
+<li><b>Multiple streams</b> in one connection, each with its own reliable delivery, so one lost packet <b>doesn’t block the others (no head-of-line blocking)</b>. They share one congestion control.</li></ul>
+
+<h2 id="s7">7. Cheat sheet (memorise this)</h2>
+<div class="box mem"><b class="t">One-liners</b>
+• Transport = process-to-process; IP = host-to-host.<br>
+• UDP demux: 1 key (dest port). TCP demux: 4-tuple.<br>
+• UDP header: src port, dst port, length, checksum.<br>
+• Checksum: add 16-bit words, wrap the carry, flip bits.<br>
+• rdt tools: checksum (errors), ACK/NAK, seq # (duplicates), timer (loss), pipelining (speed).<br>
+• Utilization = (L/R) ÷ (RTT + L/R). GBN = cumulative ACK, resend all after the loss. SR = individual ACK, buffer, resend one. SR needs seq space ≥ 2 × window.<br>
+• TCP seq = number of the first byte; ACK = next byte expected.<br>
+• Est = 7/8 Est + 1/8 Sample. Dev = 3/4 Dev + 1/4 |Sample − Est|. Timeout = Est + 4 Dev.<br>
+• 3 dup ACKs = fast retransmit. rwnd = flow control (receiver). cwnd = congestion control (network). Window = min(cwnd, rwnd).<br>
+• Handshake: SYN → SYNACK → ACK. Close: FIN/ACK each way.<br>
+• Slow start ×2 per RTT → at ssthresh go +1 per RTT. 3 dup ACKs → halve. Timeout → cwnd = 1, ssthresh = half.<br>
+• Fair share = R/K. CUBIC = cubic growth near Wmax. BBR = keep the pipe just full. ECN = routers mark, no loss needed. SACK = say exactly what you got. QUIC = UDP + TCP features + streams.</div>
+<p class="mu">Slides © J.F. Kurose &amp; K.W. Ross; notes adapted from them.</p>
+
+<script>
+const P={};
+function tg(){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
+function play(id){const p=P[id];cancelAnimationFrame(p.r);let t0=null;const f=ts=>{if(t0===null)t0=ts;const T=(ts-t0)/800;p.draw(T);if(T<p.end)p.r=requestAnimationFrame(f)};p.r=requestAnimationFrame(f)}
+function player(id,ev){
+ const s=document.getElementById(id),XS=130,XR=430,K=36,y=t=>44+t*K;
+ const mt=Math.max(...ev.map(e=>e.t))+2,H=44+mt*K;
+ let h=`<g stroke="currentColor" opacity=".4"><line x1="${XS}" x2="${XS}" y1="28" y2="${H}"/><line x1="${XR}" x2="${XR}" y1="28" y2="${H}"/></g><g font-weight="bold" text-anchor="middle" fill="currentColor"><text x="${XS}" y="18">Sender</text><text x="${XR}" y="18">Receiver</text></g>`;
+ ev.forEach((e,i)=>{
+  if(e.n){const l=e.s=='S';h+=`<text id="${id}n${i}" x="${l?XS-8:XR+8}" y="${y(e.t)}" text-anchor="${l?'end':'start'}" font-size="11" fill="${e.k?'var(--no)':'currentColor'}">${e.n}</text>`;return}
+  const f=e.d=='>',a=f?XS:XR,b=f?XR:XS,c=e.x?'var(--no)':f?'var(--ac)':'var(--ok)';
+  h+=`<line id="${id}l${i}" x1="${a}" y1="${y(e.t)}" x2="${b}" y2="${y(e.t+1)}" stroke="${c}" stroke-width="2"/><text id="${id}t${i}" x="${a+(b-a)*.3}" y="${y(e.t)+K*.3-5}" text-anchor="middle" font-size="11" fill="${c}">${e.l}</text>`;
+  if(e.x)h+=`<text id="${id}x${i}" x="${a+(b-a)*.55}" y="${y(e.t+.55)+5}" text-anchor="middle" fill="var(--no)" font-weight="bold">✖</text>`;
+ });
+ s.setAttribute('viewBox',`0 0 560 ${H}`);s.innerHTML=h;
+ const g=q=>document.getElementById(id+q);
+ const draw=T=>ev.forEach((e,i)=>{
+  if(e.n){g('n'+i).style.opacity=T>=e.t?1:0;return}
+  const p=Math.max(0,T-e.t),q=e.x?Math.min(p,.55):Math.min(p,1),f=e.d=='>',a=f?XS:XR,b=f?XR:XS,L=g('l'+i);
+  L.setAttribute('x2',a+(b-a)*q);L.setAttribute('y2',y(e.t)+K*q);g('t'+i).style.opacity=p>0?1:0;if(e.x)g('x'+i).style.opacity=p>=.55?1:0});
+ P[id]={draw,end:mt};draw(99);
+}
+player('a1',[{t:0,d:'>',l:'pkt0'},{t:1,d:'<',l:'ack0'},{t:2,d:'>',l:'pkt1',x:1},{t:3.2,s:'S',n:'⏰ timeout, resend',k:1},{t:4,d:'>',l:'pkt1 (resend)'},{t:5,d:'<',l:'ack1'},{t:6,d:'>',l:'pkt0'},{t:7,d:'<',l:'ack0',x:1},{t:8.2,s:'S',n:'⏰ timeout, resend',k:1},{t:9,d:'>',l:'pkt0 (resend)'},{t:10,s:'R',n:'duplicate! discard',k:1},{t:10,d:'<',l:'ack0 (again)'}]);
+player('a2',[{t:0,d:'>',l:'pkt0'},{t:.5,d:'>',l:'pkt1'},{t:1,d:'>',l:'pkt2',x:1},{t:1.5,d:'>',l:'pkt3'},{t:1,d:'<',l:'ack0'},{t:1.5,d:'<',l:'ack1'},{t:2.5,s:'R',n:'pkt3 out of order: discard',k:1},{t:2.5,d:'<',l:'ack1 (again)'},{t:3.6,s:'S',n:'⏰ timeout pkt2',k:1},{t:4,d:'>',l:'resend pkt2'},{t:4.5,d:'>',l:'resend pkt3'},{t:5,d:'<',l:'ack2'},{t:5.5,d:'<',l:'ack3'}]);
+player('a3',[{t:0,d:'>',l:'pkt0'},{t:.5,d:'>',l:'pkt1'},{t:1,d:'>',l:'pkt2',x:1},{t:1.5,d:'>',l:'pkt3'},{t:1,d:'<',l:'ack0'},{t:1.5,d:'<',l:'ack1'},{t:2.5,s:'R',n:'pkt3 buffered',k:1},{t:2.5,d:'<',l:'ack3'},{t:3.6,s:'S',n:'⏰ resend ONLY pkt2',k:1},{t:4,d:'>',l:'resend pkt2'},{t:5,d:'<',l:'ack2'},{t:5.1,s:'R',n:'deliver 2 and 3',k:1}]);
+player('a4',[{t:0,s:'S',n:'SYNSENT'},{t:0,d:'>',l:'SYN seq=x'},{t:1,s:'R',n:'SYN RCVD'},{t:1,d:'<',l:'SYNACK seq=y, ack=x+1'},{t:2,s:'S',n:'ESTAB'},{t:2,d:'>',l:'ACK ack=y+1 (+data)'},{t:3,s:'R',n:'ESTAB'}]);
+(function(){
+ const s=document.getElementById('cw'),d=[1,2,4,8,9,10,11,12,6,7,8,9,10,11,12,1,2,4,6,7,8],X=i=>50+i*24,Y=v=>215-v*14;
+ let h=`<g stroke="currentColor" opacity=".5"><line x1="50" y1="215" x2="550" y2="215"/><line x1="50" y1="20" x2="50" y2="215"/></g><g font-size="11" fill="currentColor"><text x="300" y="238" text-anchor="middle">time (RTTs)</text><text x="46" y="14" text-anchor="end">cwnd (MSS)</text>`;
+ for(let v=0;v<=12;v+=4)h+=`<text x="44" y="${Y(v)+4}" text-anchor="end">${v}</text>`;
+ h+=`</g><path id="cwp" d="M${d.map((v,i)=>X(i)+' '+Y(v)).join(' L')}" fill="none" stroke="var(--ac)" stroke-width="3" pathLength="1" stroke-dasharray="1"/><g font-size="11" fill="var(--no)"><text x="${X(7)-30}" y="28">3 dup ACKs: ÷2</text><text x="${X(14)-20}" y="28">timeout: cwnd = 1</text></g>`;
+ s.setAttribute('viewBox','0 0 560 245');s.innerHTML=h;const p=document.getElementById('cwp');
+ P.cw={draw:T=>p.style.strokeDashoffset=1-Math.min(1,T/9),end:9};
+})();
+</script>
+</body>
+</html>

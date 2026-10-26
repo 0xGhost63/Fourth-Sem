@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 2: Non-mutating Catalogue Report | Areej Raza</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="header-card">
+      <div class="header-top">
+        <h1 class="header-title">Task 2: Non-Mutating Catalogue Report</h1>
+        <span class="header-badge">LAB 06 &bull; TASK 02</span>
+      </div>
+      <p class="header-desc">
+        Transforms book catalogue inventory using pure ES6 functional array methods (<code>map</code>, <code>filter</code>, <code>reduce</code>, <code>find</code>, <code>some</code>, <code>every</code>, <code>sort</code>) without mutating original records.
+      </p>
+      <div class="meta-row">
+        <span>Student: <strong>Areej Raza</strong></span>
+        <span>Roll No: <strong>SE-SP25-BSE-028</strong></span>
+        <span>Course: <strong>Web Technologies (CS-312)</strong></span>
+        <span>Function: <strong>buildReport(books, search, discount)</strong></span>
+      </div>
+    </header>
+
+    <!-- Main Task Card -->
+    <main class="task-section">
+      <div class="section-head">
+        <h2 class="section-title">Catalogue Analytics</h2>
+        <span class="task-tag">Independent Task</span>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="status-banner">
+        <span><strong>Total Stock Value:</strong> <strong id="totalStockVal" style="color: var(--primary);">PKR 0</strong></span>
+        <span><strong>Out of Stock Items:</strong> <span id="outOfStockVal" class="tag tag-warning">Checking...</span></span>
+        <span><strong>Valid Pricing Check:</strong> <span id="allValidVal" class="tag tag-success">Checking...</span></span>
+      </div>
+
+      <!-- Filter Controls -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px;">
+        <div>
+          <label for="searchInput" class="field-label">Search Book Title:</label>
+          <input type="text" id="searchInput" class="input-text" value="css" placeholder="Search keywords...">
+        </div>
+        <div>
+          <label for="discountInput" class="field-label">Discount Rate (%):</label>
+          <input type="number" id="discountInput" class="input-number" value="10" min="0" max="100">
+        </div>
+        <div style="display: flex; align-items: flex-end;">
+          <button id="generateBtn" class="btn btn-primary" style="width: 100%;">Generate Report</button>
+        </div>
+      </div>
+
+      <div style="margin: 14px 0; font-size: 0.88rem; color: var(--text-muted);">
+        <strong>Normalised Titles (map):</strong>
+        <div id="normalisedList" style="margin-top: 4px;"></div>
+      </div>
+
+      <!-- Search Matches Table -->
+      <h3 style="font-size: 0.95rem; margin-top: 18px; margin-bottom: 6px; color: #334155;">Search Matches (filter):</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody id="searchResultsBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Discounted Copies Table -->
+      <h3 style="font-size: 0.95rem; margin-top: 18px; margin-bottom: 6px; color: #334155;">Discounted Copies (map with object cloning):</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Original Price</th>
+              <th>Discounted Price</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody id="discountedBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Price Ranking Table -->
+      <h3 style="font-size: 0.95rem; margin-top: 18px; margin-bottom: 6px; color: #334155;">Ascending Price Ranking (sort without mutation):</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody id="rankedBody"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      Software Engineering &bull; Web Technologies Lab 06 &bull; Areej Raza
+    </footer>
+
+  </div>
+
+  <script src="catalogueReport.js"></script>
+</body>
+</html>

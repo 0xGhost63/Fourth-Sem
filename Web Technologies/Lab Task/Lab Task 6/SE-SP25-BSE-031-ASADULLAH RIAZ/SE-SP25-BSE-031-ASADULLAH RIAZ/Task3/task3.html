@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Task 3: Revision Tracker</h1>
+  <p class="info">ASADULLAH RIAZ | SE-SP25-BSE-031 | Web Technologies (CS-312) | Lab 06</p>
+
+  <p>Two trackers made from the same function. Resetting one should not touch the other.</p>
+
+  <div class="row">
+    <div class="box">
+      <b>JavaScript revision</b> (starts at 0)
+      <div class="time" id="time1">0 min</div>
+      <button id="t1-add15">+15</button>
+      <button id="t1-add30">+30</button>
+      <button id="t1-batch">+20, 25, 35</button>
+      <button id="t1-reset">Reset</button>
+    </div>
+
+    <div class="box">
+      <b>Web Tech revision</b> (starts at 45)
+      <div class="time" id="time2">45 min</div>
+      <button id="t2-add15">+15</button>
+      <button id="t2-add30">+30</button>
+      <button id="t2-batch">+15, 20</button>
+      <button id="t2-reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="log" id="log">Ready.</div>
+
+  <footer>Web Technologies Lab 06 - ASADULLAH RIAZ</footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

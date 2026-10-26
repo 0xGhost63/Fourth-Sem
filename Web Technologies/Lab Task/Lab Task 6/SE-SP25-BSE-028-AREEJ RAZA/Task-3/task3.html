@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 3: Reusable Revision Tracker | Areej Raza</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="header-card">
+      <div class="header-top">
+        <h1 class="header-title">Task 3: Reusable Revision Tracker</h1>
+        <span class="header-badge">LAB 06 &bull; TASK 03</span>
+      </div>
+      <p class="header-desc">
+        Demonstrates closure state encapsulation. Two independent tracker instances maintain separate session totals; resetting Tracker 1 leaves Tracker 2 completely unchanged.
+      </p>
+      <div class="meta-row">
+        <span>Student: <strong>Areej Raza</strong></span>
+        <span>Roll No: <strong>SE-SP25-BSE-028</strong></span>
+        <span>Course: <strong>Web Technologies (CS-312)</strong></span>
+        <span>Pattern: <strong>Closure State &bull; ES6 Module</strong></span>
+      </div>
+    </header>
+
+    <!-- Main Task Card -->
+    <main class="task-section">
+      <div class="section-head">
+        <h2 class="section-title">Independent Tracker Instances</h2>
+        <span class="task-tag">Independent Task</span>
+      </div>
+
+      <div class="trackers-grid">
+        <!-- Tracker 1 -->
+        <div class="tracker-card">
+          <div class="tracker-head">
+            <span class="tag tag-success">Tracker Instance 1</span>
+            <h3 style="font-size: 1.1rem; margin-top: 6px;">Web Technologies</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Initial Baseline: 0 minutes</p>
+          </div>
+          <div class="tracker-num-box">
+            <div id="valTracker1" class="tracker-time-text">0 mins</div>
+            <div class="tracker-time-sub">Accumulated Total</div>
+          </div>
+          <div class="btn-row" style="flex-direction: column; align-items: stretch;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button id="btnAdd15_T1" class="btn btn-secondary">+15 mins</button>
+              <button id="btnAdd30_T1" class="btn btn-secondary">+30 mins</button>
+            </div>
+            <button id="btnAddMulti_T1" class="btn btn-secondary">+ Batch (20, 25, 15m)</button>
+            <button id="btnReset_T1" class="btn btn-danger">&#x21bb; Reset Tracker 1</button>
+          </div>
+        </div>
+
+        <!-- Tracker 2 -->
+        <div class="tracker-card">
+          <div class="tracker-head">
+            <span class="tag tag-warning">Tracker Instance 2</span>
+            <h3 style="font-size: 1.1rem; margin-top: 6px;">Software Engineering</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Initial Baseline: 15 minutes</p>
+          </div>
+          <div class="tracker-num-box">
+            <div id="valTracker2" class="tracker-time-text">15 mins</div>
+            <div class="tracker-time-sub">Accumulated Total</div>
+          </div>
+          <div class="btn-row" style="flex-direction: column; align-items: stretch;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button id="btnAdd15_T2" class="btn btn-secondary">+15 mins</button>
+              <button id="btnAdd30_T2" class="btn btn-secondary">+30 mins</button>
+            </div>
+            <button id="btnAddMulti_T2" class="btn btn-secondary">+ Batch (10, 15, 35m)</button>
+            <button id="btnReset_T2" class="btn btn-danger">&#x21bb; Reset Tracker 2</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Log -->
+      <div style="margin-top: 16px;">
+        <span class="field-label">Activity &amp; Independence Audit Log:</span>
+        <div id="activityLog" class="log-box"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      Software Engineering &bull; Web Technologies Lab 06 &bull; Areej Raza
+    </footer>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

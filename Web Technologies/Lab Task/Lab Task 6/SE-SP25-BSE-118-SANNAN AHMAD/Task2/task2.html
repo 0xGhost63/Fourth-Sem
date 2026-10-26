@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 2 | Sannan Ahmad</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="site-header">
+    <h1>Web Technologies (CS-312) - Lab 06</h1>
+    <div class="student-info">Sannan Ahmad &bull; Roll No: SE-SP25-BSE-118</div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav-tabs">
+    <a href="../Task1/task1.html">Task 1: Marks Analyser</a>
+    <a href="task2.html" class="active">Task 2: Book Catalogue</a>
+    <a href="../Task3/task3.html">Task 3: Revision Tracker</a>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <div class="content-box">
+      <h2 class="page-title">Task 2: Book Catalogue Report</h2>
+      <p class="page-description">
+        Demonstrates non-mutating array operations using map, filter, reduce, find, some, every, and sort on a book catalogue.
+      </p>
+
+      <!-- Filter Controls -->
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="searchQuery" class="form-label">Search Book Title:</label>
+          <input 
+            type="text" 
+            id="searchQuery" 
+            class="form-input" 
+            value="css" 
+            placeholder="e.g. css, html, lab"
+          >
+        </div>
+        <div class="form-group" style="max-width: 180px;">
+          <label for="discountRate" class="form-label">Discount Percentage (%):</label>
+          <input 
+            type="number" 
+            id="discountRate" 
+            class="form-input" 
+            value="10" 
+            min="0" 
+            max="100"
+          >
+        </div>
+        <button id="btnFilter" class="btn btn-primary">Apply Filter</button>
+      </div>
+
+      <!-- Inventory Summary -->
+      <div class="info-summary">
+        <p><strong>Total Inventory Value:</strong> <span id="valTotalStock">PKR 0</span></p>
+        <p><strong>Stock Status:</strong> <span id="statusStock">Checking...</span></p>
+        <p><strong>Immutability Check:</strong> <span id="statusAudit" style="color: #03543f; font-weight: bold;">Verified (Original catalogue unmutated)</span></p>
+        <p><strong>Normalised Titles (map):</strong> <span id="uppercaseTitles" style="color: #444;"></span></p>
+      </div>
+
+      <!-- Main Catalogue Table -->
+      <h3 style="font-size: 16px; color: #1e3a5f; margin: 20px 0 8px 0;">Books Catalogue &amp; Pricing</h3>
+      <div class="table-container">
+        <table class="simple-table">
+          <thead>
+            <tr>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 32%;">Book Title</th>
+              <th style="width: 20%;">Original Price</th>
+              <th style="width: 22%;">Discounted Price (map)</th>
+              <th style="width: 18%;">Stock Availability</th>
+            </tr>
+          </thead>
+          <tbody id="catalogTableBody">
+            <!-- Populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Price Ranking List -->
+      <h3 style="font-size: 16px; color: #1e3a5f; margin: 24px 0 8px 0;">Price Ranking (sort ascending without mutation)</h3>
+      <div style="background-color: #f8fafc; border: 1px solid #dcdfe6; border-radius: 4px; padding: 12px 18px;">
+        <ol id="rankingList" style="padding-left: 20px; font-size: 14px; line-height: 1.8;">
+          <!-- Populated by JavaScript -->
+        </ol>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      Web Technologies Lab 06 &bull; Sannan Ahmad (SE-SP25-BSE-118)
+    </footer>
+  </div>
+
+  <script src="catalogue_report.js"></script>
+</body>
+</html>

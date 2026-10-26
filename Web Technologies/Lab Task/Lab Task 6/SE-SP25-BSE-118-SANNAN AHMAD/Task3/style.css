@@ -1,0 +1,360 @@
+/* Style Sheet - Lab 06 (Web Technologies)
+   Student: Sannan Ahmad | SE-SP25-BSE-118 */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4f6f8;
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* Header */
+.site-header {
+  background-color: #1e3a5f;
+  color: #ffffff;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.site-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.site-header .student-info {
+  font-size: 14px;
+  color: #dbe4ee;
+}
+
+/* Task navigation tabs */
+.nav-tabs {
+  background-color: #2b5c8f;
+  padding: 0 24px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.nav-tabs a {
+  color: #dbe4ee;
+  text-decoration: none;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  border-bottom: 3px solid transparent;
+}
+
+.nav-tabs a:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nav-tabs a.active {
+  color: #ffffff;
+  border-bottom: 3px solid #f39c12;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Main Container */
+.main-container {
+  max-width: 920px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.content-box {
+  background-color: #ffffff;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 20px;
+  color: #1e3a5f;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #eef2f5;
+}
+
+.page-description {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 20px;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: #2b5c8f;
+  box-shadow: 0 0 4px rgba(43, 92, 143, 0.25);
+}
+
+.form-inline {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.form-inline .form-group {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 0;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+  align-items: center;
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: #2b5c8f;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #1e3a5f;
+}
+
+.btn-secondary {
+  background-color: #eef2f5;
+  color: #333333;
+  border: 1px solid #dcdfe6;
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-danger {
+  background-color: #c0392b;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #962d22;
+}
+
+/* Alerts */
+.alert {
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin: 14px 0;
+}
+
+.alert-error {
+  background-color: #fdf2f2;
+  color: #9b1c1c;
+  border: 1px solid #f8b4b4;
+  display: none;
+}
+
+.alert-info {
+  background-color: #ebf5ff;
+  color: #1e429f;
+  border: 1px solid #b4c6e7;
+}
+
+/* Tables */
+.table-container {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.simple-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.simple-table th, 
+.simple-table td {
+  border: 1px solid #dcdfe6;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.simple-table th {
+  background-color: #f8fafc;
+  font-weight: bold;
+  color: #1e3a5f;
+}
+
+.simple-table tr:nth-child(even) {
+  background-color: #fbfcfd;
+}
+
+.simple-table tr.highlight {
+  background-color: #e8f4fd;
+  font-weight: 500;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.badge-in-stock {
+  background-color: #def7ec;
+  color: #03543f;
+}
+
+.badge-out-stock {
+  background-color: #fde8e8;
+  color: #9b1c1c;
+}
+
+/* Summary info panels */
+.info-summary {
+  background-color: #f8fafc;
+  border: 1px solid #dcdfe6;
+  border-left: 4px solid #2b5c8f;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.info-summary p {
+  margin: 4px 0;
+}
+
+.info-summary strong {
+  color: #1e3a5f;
+}
+
+/* Task 3 Trackers */
+.trackers-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.tracker-box {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  background-color: #fbfcfd;
+  padding: 18px;
+}
+
+.tracker-box h3 {
+  font-size: 16px;
+  color: #1e3a5f;
+  margin-bottom: 4px;
+}
+
+.tracker-box .baseline-text {
+  font-size: 13px;
+  color: #777777;
+  margin-bottom: 12px;
+}
+
+.tracker-display {
+  background-color: #ffffff;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  padding: 14px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.tracker-display .minutes-value {
+  font-size: 26px;
+  font-weight: bold;
+  color: #2b5c8f;
+}
+
+.tracker-display .minutes-label {
+  font-size: 12px;
+  color: #888888;
+}
+
+.tracker-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tracker-actions .sub-row {
+  display: flex;
+  gap: 8px;
+}
+
+.tracker-actions .sub-row .btn {
+  flex: 1;
+}
+
+.log-box {
+  background-color: #f8fafc;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #333333;
+  min-height: 48px;
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+/* Footer */
+.site-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #888888;
+  margin-top: 30px;
+  padding: 16px 0;
+}

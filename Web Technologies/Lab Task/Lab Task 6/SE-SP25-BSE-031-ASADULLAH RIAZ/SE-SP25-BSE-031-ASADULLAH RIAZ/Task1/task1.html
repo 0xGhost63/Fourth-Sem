@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Task 1: Marks Analyser</h1>
+  <p class="info">Asadullah Riaz | SE-SP25-BSE-031 | Web Technologies (CS-312) | Lab 06</p>
+
+  <p>Enter marks separated by commas. Every mark must be a number from 0 to 100.</p>
+
+  <input type="text" id="marks" value="78, 45, 90, 60">
+  <button id="run">Analyse</button>
+
+  <p>
+    Quick tests:
+    <button class="preset" data-val="78, 45, 90, 60">normal</button>
+    <button class="preset" data-val="">empty</button>
+    <button class="preset" data-val="55, , 80">blank value</button>
+    <button class="preset" data-val="40, abc, 70">not a number</button>
+    <button class="preset" data-val="65, 120">out of range</button>
+  </p>
+
+  <p class="error" id="error"></p>
+
+  <table id="result">
+    <tr><th>Count</th><td id="count"></td></tr>
+    <tr><th>Total</th><td id="total"></td></tr>
+    <tr><th>Average</th><td id="average"></td></tr>
+    <tr><th>Passed (50 or more)</th><td id="passed"></td></tr>
+    <tr><th>Highest</th><td id="highest"></td></tr>
+  </table>
+
+  <footer>Web Technologies Lab 06 - ASADULLAH RIAZ</footer>
+
+  <script src="marks_analyser.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 06 - Task 1 | Sannan Ahmad</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="site-header">
+    <h1>Web Technologies (CS-312) - Lab 06</h1>
+    <div class="student-info">Sannan Ahmad &bull; Roll No: SE-SP25-BSE-118</div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav-tabs">
+    <a href="task1.html" class="active">Task 1: Marks Analyser</a>
+    <a href="../Task2/task2.html">Task 2: Book Catalogue</a>
+    <a href="../Task3/task3.html">Task 3: Revision Tracker</a>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <div class="content-box">
+      <h2 class="page-title">Task 1: Safe Marks Analyser</h2>
+      <p class="page-description">
+        Validates an array of student marks without mutating the input, handles empty arrays safely without NaN or division by zero, and calculates summary metrics.
+      </p>
+
+      <!-- Input Form -->
+      <div class="form-group">
+        <label for="inputMarks" class="form-label">Enter Marks (comma-separated):</label>
+        <input 
+          type="text" 
+          id="inputMarks" 
+          class="form-input" 
+          value="78, 45, 90, 60" 
+          placeholder="e.g. 78, 45, 90, 60"
+        >
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-group">
+        <button id="btnAnalyse" class="btn btn-primary">Analyse Marks</button>
+        <button class="btn btn-secondary preset-btn" data-val="78, 45, 90, 60">Sample Data</button>
+        <button class="btn btn-secondary preset-btn" data-val="">Empty Array []</button>
+        <button class="btn btn-secondary preset-btn" data-val="50, 65, 80, 42">Mixed Marks</button>
+        <button class="btn btn-secondary preset-btn" data-val="55, , 80">Whitespace Error</button>
+        <button class="btn btn-secondary preset-btn" data-val="40, abc, 70">Invalid String</button>
+        <button class="btn btn-secondary preset-btn" data-val="65, 120">Out of Range</button>
+      </div>
+
+      <!-- Error Alert -->
+      <div id="errorAlert" class="alert alert-error"></div>
+
+      <!-- Results Display -->
+      <div id="resultsArea">
+        <h3 style="font-size: 16px; color: #1e3a5f; margin: 20px 0 8px 0;">Summary Results</h3>
+        <div class="table-container">
+          <table class="simple-table">
+            <thead>
+              <tr>
+                <th style="width: 50%;">Metric</th>
+                <th>Calculated Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Total Marks Count</td>
+                <td id="outCount">0</td>
+              </tr>
+              <tr>
+                <td>Total Sum</td>
+                <td id="outTotal">0</td>
+              </tr>
+              <tr>
+                <td>Average Score</td>
+                <td id="outAverage">0.00</td>
+              </tr>
+              <tr>
+                <td>Passed Students (&ge; 50)</td>
+                <td id="outPassed">0</td>
+              </tr>
+              <tr>
+                <td>Highest Mark</td>
+                <td id="outHighest">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="marksList" style="margin-top: 14px; font-size: 13px; color: #555555;"></div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      Web Technologies Lab 06 &bull; Sannan Ahmad (SE-SP25-BSE-118)
+    </footer>
+  </div>
+
+  <script src="marks_analyser.js"></script>
+</body>
+</html>
