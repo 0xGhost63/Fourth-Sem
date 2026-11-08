@@ -1,0 +1,45 @@
+Your uploaded file is only Chapter 01 (Introduction to AI, 72 slides on AI history, the Turing test, rational agents and so on). It has no search, adversarial or CSP content, so I can't list your syllabus from it. The list below follows the standard AIMA scope that this course is based on. If you upload the search and CSP chapters, I can check it against your actual slides.
+
+**Uninformed Search (all)**
+- Breadth-First Search (BFS) (DONE)
+- Depth-First Search (DFS)
+- Uniform-Cost Search (UCS)
+- Depth-Limited Search (DLS)
+- Iterative Deepening Depth-First Search (IDDFS)
+- Bidirectional Search
+
+**Informed Search (all)**
+- Greedy Best-First Search
+- A* Search
+- Weighted A* (sometimes included)
+- IDA* (Iterative Deepening A*), if your slides cover it
+- RBFS and SMA* (memory-bounded; usually only mentioned)
+- Heuristic design topics that go with these: admissible and consistent heuristics, and dominance (for example, 8-puzzle with misplaced tiles vs Manhattan distance)
+
+**Local Search**
+- Hill Climbing
+  - Simple (first-choice) hill climbing
+  - Steepest-ascent hill climbing
+  - Stochastic hill climbing
+  - Random-restart hill climbing
+- Simulated Annealing
+- Genetic Algorithm (selection, crossover, mutation)
+- Examples: Knapsack Problem, Traveling Salesman Problem, 8 Queens
+- Other common examples: 8-puzzle, Max-Cut, graph coloring, function maximization (for example, f(x) = x²)
+- Common problems to know: local maxima, plateaus, ridges and shoulders
+
+**Adversarial Search**
+- Minimax
+- Alpha-Beta Pruning
+- Monte Carlo Tree Search (MCTS: selection, expansion, simulation, backpropagation, with UCB1/UCT)
+- Optional extras: Expectimax, evaluation functions, depth-limited minimax
+
+**Constraint Satisfaction Problems (CSP)**
+- Backtracking Search
+- Forward Checking
+- Arc Consistency (AC-3)
+- Variable and value ordering heuristics: MRV (Minimum Remaining Values), Degree Heuristic, LCV (Least Constraining Value)
+- Min-Conflicts (local search for CSPs)
+- Examples: Map Coloring, N-Queens, Sudoku, Cryptarithmetic
+
+FIN

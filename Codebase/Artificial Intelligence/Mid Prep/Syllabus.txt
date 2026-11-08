@@ -1,0 +1,7 @@
+LAB 03 - 07
+
+- **Lab 03:** Uninformed Searching Algorithms: Depth First Search
+- **Lab 04:** Uninformed Searching Algorithms: Breadth First Search and Uniform Cost Search
+- **Lab 05:** Informed Search and Greedy Best-First Search
+- **Lab 06:** Informed Searching Algorithms: A* Search
+- **Lab 07:** Local Search Algorithms: Hill Climbing, Simulated Annealing

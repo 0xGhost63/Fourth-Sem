@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inline vs Inline-Block</title>
+  <style>
+    .box {
+      width: 150px;
+      height: 50px;
+      background-color: lightcoral;
+      border: 2px solid black;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    /* inline ignores width, height, and vertical margins/padding */
+    .inline-example {
+      display: inline;
+    }
+
+    /* inline-block keeps elements on the same line but respects dimensions */
+    .inline-block-example {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>1. Display: inline (Ignores width, height, and vertical spacing)</h3>
+  <div class="box inline-example">First</div>
+  <div class="box inline-example">Second</div>
+
+  <h3>2. Display: inline-block (Respects width, height, and spacing)</h3>
+  <div class="box inline-block-example">First</div>
+  <div class="box inline-block-example">Second</div>
+
+</body>
+</html>
